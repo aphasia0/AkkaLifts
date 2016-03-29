@@ -18,4 +18,10 @@ public class LiftPad extends UntypedActor{
 	public LiftPad(ActorRef scheduler) {
 		this.scheduler = scheduler;
 	}
+
+	@Override
+	public void onReceive(Object arg0) throws Exception {
+	
+		
+	}
 }

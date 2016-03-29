@@ -38,7 +38,7 @@ public class Lift extends UntypedActor{
 		if(msg instanceof Move)
 		{
 			Move move = (Move) msg;
-			log.debug("Moving ----- Door Closed []");
+			log.debug("Moving ----- Door Closed {}");
 
 			FiniteDuration f = new FiniteDuration(1, TimeUnit.SECONDS);
 			getContext().system().scheduler().scheduleOnce(f,
@@ -50,12 +50,12 @@ public class Lift extends UntypedActor{
 		}
 		else if(msg instanceof Stop)
 		{
-			log.debug("Stopped ----- Door opening [***|***]");
+			log.debug("Stopped ----- Door opening {***|***}");
 
 		}
 		else if (msg instanceof FloorReached)
 		{
-			//FloorReached f = (FloorReached)msg;
+			log.debug("Stopped ----- Door opening {***|***}");
 			sheduler.tell(msg, getSelf());
 			sheduler = null;
 

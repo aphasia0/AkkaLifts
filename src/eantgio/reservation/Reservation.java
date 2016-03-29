@@ -6,19 +6,28 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import eantgio.lift_plant.LiftPlant;
+import eantgio.reservation.request.floor.FloorPad;
 import eantgio.reservation.request.lift.LiftPad;
 
 public class Reservation extends UntypedActor{
 
-	public static Props create(ActorRef liftPlant) {
-		return Props.create(Reservation.class, liftPlant);
+	public static Props create(ActorRef liftPlant, int floors) {
+		return Props.create(Reservation.class,  liftPlant,  floors);
 	}
+
+
+	private int floors;
 	
+	public Reservation(ActorRef liftPlant, int floors) {
+		this.floors = floors;
+		this.liftPlant = liftPlant;
+		
+	}
 	public static class Schedulers{
 		
 		public final List<ActorRef> schedulers;
 
-		private static Schedulers of (final List<ActorRef> schedulers)
+		public static Schedulers of (final List<ActorRef> schedulers)
 		{
 			return new Schedulers(schedulers);
 		}
@@ -32,7 +41,7 @@ public class Reservation extends UntypedActor{
 	private ActorRef liftPlant;
 	
 	public Reservation(ActorRef liftPlant) {
-		this.liftPlant = liftPlant;
+	
 	}
 	
 	@Override
@@ -46,10 +55,11 @@ public class Reservation extends UntypedActor{
 		if(msg instanceof Schedulers)
 		{
 			Schedulers s = (Schedulers) msg;
-			getContext().actorOf(Props.create(Booking.class));
-			
-		
+			ActorRef booking = getContext().actorOf(Booking.props(s.schedulers,floors));
 			s.schedulers.forEach(e -> getContext().actorOf(LiftPad.props(e)));
+			for (int i = 0; i < floors; i++) {
+				getContext().actorOf(FloorPad.props(booking, i),"FloorPad-"+i);
+			}
 		}
 		
 	}

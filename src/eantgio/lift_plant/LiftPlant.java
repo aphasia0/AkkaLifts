@@ -7,6 +7,7 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import eantgio.lift_plant.lift.Lift;
 import eantgio.lift_plant.sheduler.Scheduler;
+import eantgio.reservation.Reservation;
 
 public class LiftPlant extends UntypedActor{
 
@@ -40,7 +41,7 @@ public class LiftPlant extends UntypedActor{
 	public void onReceive(Object msg) throws Exception {
 		if(msg instanceof GetSchedulers)
 		{
-			
+			getSender().tell(Reservation.Schedulers.of(schedulers), getSelf());
 		}
 		
 	}

@@ -53,12 +53,12 @@ public class Scheduler extends UntypedActor{
 	SortedSet<Integer> downList = new TreeSet<>();
 	private ActorRef lift;
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-//
-//public static void main(String[] args) {
-//	upList.add(33);
-//	upList.add(22);
-//	System.out.println(printList(upList));
-//}
+	//
+	//public static void main(String[] args) {
+	//	upList.add(33);
+	//	upList.add(22);
+	//	System.out.println(printList(upList));
+	//}
 
 
 	protected void storeThisCall(int weWannaGo) {
@@ -109,9 +109,10 @@ public class Scheduler extends UntypedActor{
 
 	@Override
 	public void onReceive(Object msg) throws Exception { //IDLE STATE
-
+	
 		if(msg instanceof FloorPad.Request)
 		{
+			log.debug("aa");
 			int weAreGoingTo = ((FloorPad.Request)msg).fromFloor;
 			if(weAreGoingTo == currentPosition) //OPEN THE DOOR WE'RE ALREADY THERE
 			{
@@ -132,9 +133,9 @@ public class Scheduler extends UntypedActor{
 	protected int getNextMove() {
 
 		int next;
-		
+
 		log.debug("UpList reservation is : "+printList(upList));
-		log.debug("UpList reservation is : "+printList(upList));
+		log.debug("UpList reservation is : "+printList(downList));
 		if(upList.size() == 0 && downList.size() == 0)
 			next = -1; //No next move
 		else if(direction == Direction.UP && !upList.isEmpty())
@@ -160,24 +161,24 @@ public class Scheduler extends UntypedActor{
 		log.debug("Decision is : "+next);
 		return next;
 	}
-	
-	
+
+
 
 	private void modifyDirection(int weAreGoingTo) {
 		if(weAreGoingTo > currentPosition)
 		{
 			direction = Direction.UP;
-			futurePosition = currentPosition + 1;
+			futurePosition = weAreGoingTo;
 		}
 		else if (weAreGoingTo < currentPosition)
 		{
 			direction = Direction.DOWN;
-			futurePosition = currentPosition - 1;
+			futurePosition = weAreGoingTo;
 		}
 	}
 
 	private static String printList(SortedSet<Integer> list) {
-		StringBuffer b = new StringBuffer("[");
+		StringBuffer b = new StringBuffer("[ ");
 		list.forEach(e -> b.append(e+",") );
 		b.replace(b.length()-1, b.length(), "]");
 		return b.toString();
