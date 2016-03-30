@@ -136,6 +136,7 @@ public class Scheduler extends UntypedActor{
 
 		log.debug("UpList reservation is : "+printList(upList));
 		log.debug("UpList reservation is : "+printList(downList));
+		
 		if(upList.size() == 0 && downList.size() == 0)
 			next = -1; //No next move
 		else if(direction == Direction.UP && !upList.isEmpty())

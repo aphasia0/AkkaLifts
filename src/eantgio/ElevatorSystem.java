@@ -20,9 +20,7 @@ public class ElevatorSystem extends UntypedActor{
 	}
 
 	public static void start() {
-		ActorSystem system = ActorSystem.create("actor-demo-elevator");
-		
-	
+		ActorSystem system = ActorSystem.create("actor-demo-elevator1");	
 		system.actorOf(Props.create(ElevatorSystem.class), "ElevatorSystem").tell(START, null);
 			
 		
